@@ -3,7 +3,7 @@ package org.example;
 import com.google.gson.Gson;
 
 public interface Connection {
-    Gson query();
+    Gson query(String query);
 
-    int exec();
+    int exec(String query);
 }
