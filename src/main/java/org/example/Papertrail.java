@@ -10,12 +10,12 @@ public class Papertrail implements Connection {
     }
 
     @Override
-    public Gson Query() {
+    public Gson query() {
         return null;
     }
 
     @Override
-    public int Exec() {
+    public int exec() {
         return 0;
     }
 }
