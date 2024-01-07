@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 
 import java.net.URI;
 
-public class Papertrail implements Connection {
+public class Papertrail implements PaperTrailConnection {
+    URI uri;
+
     public Papertrail(URI uri) {
     }
 
