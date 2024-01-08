@@ -1,4 +1,4 @@
-package org.example;
+package com.github.papertrail;
 
 import com.google.gson.JsonArray;
 

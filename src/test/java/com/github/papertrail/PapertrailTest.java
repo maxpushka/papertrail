@@ -1,4 +1,4 @@
-package org.example;
+package com.github.papertrail;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
