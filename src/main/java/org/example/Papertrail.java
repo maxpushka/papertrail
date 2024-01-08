@@ -2,9 +2,6 @@ package org.example;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParseException;
-import org.apache.calcite.sql.parser.SqlParser;
 
 import java.net.URI;
 import java.sql.*;
