@@ -1,11 +1,9 @@
 package org.example;
 
-import com.google.gson.Gson;
-
-import java.util.List;
+import com.google.gson.JsonArray;
 
 public interface PapertrailConnection {
-    List<Gson> query(String query);
+    JsonArray query(String query);
 
     int exec(String query);
 }
