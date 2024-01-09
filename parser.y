@@ -9,12 +9,16 @@ void yyerror(const char *s) { fprintf(stderr, "Error: %s\n", s); }
 %}
 
 %union {
-    int num;
-    char* str;
+  int num;
+  char* str;
 }
 
-%token INSERT INTO VALUES UPDATE SET UNSET REMOVE DELETE ERASE SELECT FROM WHERE PATCH ON CONFLICT DO NOTHING OBJECT UNION ALL DISTINCT JOIN LEFT RIGHT OUTER INNER CROSS UNNEST WITH RECURSIVE ORDINALITY ORDER BY GROUP HAVING LIMIT OFFSET INTERSECT EXCEPT OBJECTS NUMBER IDENTIFIER STRING AS ASC DESC
+%token INSERT INTO VALUES UPDATE SET UNSET REMOVE DELETE ERASE SELECT FROM WHERE PATCH ON CONFLICT DO NOTHING OBJECT UNION ALL DISTINCT JOIN LEFT RIGHT OUTER INNER CROSS UNNEST WITH RECURSIVE ORDINALITY ORDER BY GROUP HAVING LIMIT OFFSET INTERSECT EXCEPT OBJECTS AS ASC DESC ARRAY NUMBER IDENTIFIER STRING
+
+%type <num> NUMBER
 %type <str> IDENTIFIER STRING
+
+%start transaction
 
 %%
 
@@ -32,7 +36,12 @@ statement
   ;
 
 select_query
-  : SELECT select_list FROM table_reference select_options ';'
+  : SELECT select_distinct_list FROM table_reference select_options
+  ;
+
+select_distinct_list
+  : DISTINCT select_list
+  | select_list
   ;
 
 select_list
@@ -45,8 +54,21 @@ table_reference
   | '(' VALUES values_list ')' table_alias
   | '(' OBJECTS objects_list ')' table_alias
   | '(' select_query ')' table_alias
-  | table_reference JOIN table_reference ON condition
-  | UNNEST '(' array_expr ')' table_alias
+  | table_reference join_type JOIN table_reference ON condition
+  | UNNEST '(' array_literal ')' table_alias unnest_with_ordinality
+  ;
+
+join_type
+  : LEFT OUTER
+  | RIGHT OUTER
+  | INNER
+  | CROSS
+  | /* empty, for standard join */
+  ;
+
+unnest_with_ordinality
+  : WITH ORDINALITY
+  | /* empty, if no ordinality */
   ;
 
 table_alias
@@ -104,32 +126,99 @@ num_expr
   | IDENTIFIER
   ;
 
-array_expr: /* logic to parse array expression */
-          ;
+array_literal
+  : '[' value_list_items ']'
+  ;
 
-values_list: /* logic to parse VALUES list */
-           ;
+array_constructor
+  : ARRAY array_literal
+  | ARRAY '(' value_list_items ')'
 
-objects_list: /* logic to parse OBJECTS list */
-            ;
+values_list
+  : '(' value_list_items ')'
+  | values_list ',' '(' value_list_items ')'
+  ;
 
-insert_query: /* existing logic for INSERT */
-            ;
+value_list_items
+  : value
+  | value_list_items ',' value
+  ;
 
-update_query: /* existing logic for UPDATE */
-            ;
+value
+  : NUMBER
+  | STRING
+  | object_literal
+  | object_constructor
+  | array_literal
+  | array_constructor
+  ;
 
-delete_query: /* existing logic for DELETE */
-            ;
+object_constructor
+  : OBJECT '(' object_args ')'
+  ;
 
-erase_query: /* existing logic for ERASE */
-           ;
+object_args
+  : object_arg
+  | object_args ',' object_arg
+  ;
 
-column_list: IDENTIFIER
-           | column_list ',' IDENTIFIER
-           ;
+object_arg
+  : IDENTIFIER ':' value
+  ;
 
-condition: /* Your condition parsing logic */
-          ;
+object_literal
+  : '{' object_args '}'
+  ;
+
+objects_list
+  : object_literal
+  | objects_list ',' object_literal
+  ;
+
+insert_query
+  : INSERT INTO IDENTIFIER '(' column_list ')' VALUES values_list
+  | INSERT INTO IDENTIFIER object_literal
+  | INSERT INTO IDENTIFIER select_query on_conflict
+  ;
+
+on_conflict
+  : ON CONFLICT '(' column_list ')' DO conflict_action
+  | /* empty, if no conflict action */
+  ;
+
+conflict_action
+  : UPDATE SET update_set
+  | NOTHING
+  ;
+
+update_query
+  : UPDATE IDENTIFIER SET update_set WHERE condition
+  | UPDATE IDENTIFIER PATCH object_literal WHERE condition
+  | UPDATE IDENTIFIER UNSET IDENTIFIER WHERE condition
+  | UPDATE IDENTIFIER REMOVE IDENTIFIER WHERE condition
+  ;
+
+update_set
+  : IDENTIFIER '=' value
+  | update_set ',' IDENTIFIER '=' value
+  ;
+
+delete_query
+  : DELETE FROM IDENTIFIER WHERE condition
+  | DELETE FROM IDENTIFIER
+  ;
+
+erase_query
+  : ERASE FROM IDENTIFIER WHERE condition
+  ;
+
+column_list
+  : IDENTIFIER
+  | column_list ',' IDENTIFIER
+  ;
+
+condition
+  : /* Your condition parsing logic */
+  ;
 
 %%

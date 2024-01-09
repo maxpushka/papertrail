@@ -46,6 +46,7 @@ OBJECTS        { return OBJECTS; }
 AS             { return AS; }
 ASC            { return ASC; }
 DESC           { return DESC; }
+ARRAY          { return ARRAY; }
 [0-9]+         { yylval.num = atoi(yytext); return NUMBER; }
 [a-zA-Z_][a-zA-Z0-9_]*  { yylval.str = strdup(yytext); return IDENTIFIER; }
 '[^']*'       { yylval.str = strdup(yytext); return STRING; }
