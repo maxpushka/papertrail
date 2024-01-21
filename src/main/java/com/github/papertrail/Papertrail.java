@@ -2,6 +2,7 @@ package com.github.papertrail;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import jdk.jfr.ContentType;
 
 import java.net.URI;
 import java.sql.*;
