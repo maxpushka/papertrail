@@ -9,13 +9,13 @@ import java.io.IOException;
 
 public class SqlQueryBuilder implements QueryBuilder {
     @Override
-    public String build(HttpServletRequest requestObject) {
-        StringBuilder requestBody = new StringBuilder();
-        try (BufferedReader reader = requestObject.getReader()) {
+    public String build(HttpServletRequest requestBody) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader reader = requestBody.getReader()) {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                requestBody.append(line);
+                stringBuilder.append(line);
             }
             return requestBody.toString();
 

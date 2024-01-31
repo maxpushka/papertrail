@@ -9,8 +9,8 @@ import com.github.papertrail.server.http.responsebuilder.ResponseBuilder;
 import com.github.papertrail.server.http.responsebuilder.ResponseBuilderFactory;
 import com.github.papertrail.parser.MockParser;
 import com.github.papertrail.parser.Transaction;
-import com.google.gson.JsonElement;
 import jakarta.servlet.http.HttpServletRequest;
+import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +46,7 @@ public class Controller {
             }
         }
 
-        List<JsonElement> result = new MockDriver().run(tx);
+        List<JSONObject> result = new MockDriver().run(tx);
         String response = respBuilder.build(result);
         return ResponseEntity.ok(response);
     }

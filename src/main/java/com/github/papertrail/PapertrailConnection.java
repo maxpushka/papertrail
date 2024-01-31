@@ -1,9 +1,9 @@
 package com.github.papertrail;
 
-import com.google.gson.JsonArray;
+import org.json.JSONArray;
 
 public interface PapertrailConnection {
-    JsonArray query(String query);
+    JSONArray query(String query);
 
     int exec(String query);
 }

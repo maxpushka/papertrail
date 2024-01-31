@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     implementation("org.json:json:20231013")
-
+    testImplementation("org.mockito:mockito-core:5.10.0")
     implementation("org.springframework:spring-context:6.1.3")
     implementation("org.springframework:spring-web:6.1.3")
     implementation("org.springframework:spring-core:6.1.3")

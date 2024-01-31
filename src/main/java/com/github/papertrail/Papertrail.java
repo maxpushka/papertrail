@@ -1,8 +1,7 @@
 package com.github.papertrail;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import jdk.jfr.ContentType;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.sql.*;
@@ -15,23 +14,23 @@ public class Papertrail implements PapertrailConnection {
     }
 
     @Override
-    public JsonArray query(String query) {
+    public JSONArray query(String query) {
         try (Connection connection = DriverManager.getConnection(uri.toString());
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
-            JsonArray jsonArray = new JsonArray();
+            JSONArray jsonArray = new JSONArray();
 
             while (resultSet.next()) {
-                JsonObject jsonObject = new JsonObject();
+                JSONObject jsonObject = new JSONObject();
                 int columns = resultSet.getMetaData().getColumnCount();
 
                 for (int i = 1; i <= columns; ++i) {
                     String columnName = resultSet.getMetaData().getColumnName(i);
                     Object value = resultSet.getObject(i);
-                    jsonObject.addProperty(columnName, value.toString());
+                    jsonObject.put(columnName, value.toString());
                 }
-                jsonArray.add(jsonObject);
+                jsonArray.put(jsonObject);
             }
 
             return jsonArray;
