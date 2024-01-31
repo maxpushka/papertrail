@@ -12,10 +12,10 @@ import java.util.Map;
 
 public class JsonQueryBuilder implements QueryBuilder {
     @Override
-    public String build(HttpServletRequest requestBody) {
+    public String build(HttpServletRequest request) {
         StringBuilder queryBuilder = new StringBuilder();
 
-        try (BufferedReader reader = requestBody.getReader()) {
+        try (BufferedReader reader = request.getReader()) {
             JSONObject jsonObject = new JSONObject(reader.readLine());
 
             if (!jsonObject.has("q")) {
@@ -26,13 +26,11 @@ public class JsonQueryBuilder implements QueryBuilder {
 
             if (jsonObject.has("p")) {
                 Object params = jsonObject.get("p");
-                if (params instanceof JSONArray) {
-                    JSONArray paramArray = (JSONArray) params;
+                if (params instanceof JSONArray paramArray) {
                     for (Object param : paramArray) {
                         query = replaceFirstParameterPlaceholder(query, param.toString());
                     }
-                } else if (params instanceof JSONObject) {
-                    JSONObject paramMap = (JSONObject) params;
+                } else if (params instanceof JSONObject paramMap) {
                     for (Map.Entry<String, Object> entry : paramMap.toMap().entrySet()) {
                         query = replaceNamedParameter(query, entry.getKey(), entry.getValue().toString());
                     }

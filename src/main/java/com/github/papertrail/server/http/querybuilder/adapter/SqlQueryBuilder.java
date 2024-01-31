@@ -9,15 +9,15 @@ import java.io.IOException;
 
 public class SqlQueryBuilder implements QueryBuilder {
     @Override
-    public String build(HttpServletRequest requestBody) {
+    public String build(HttpServletRequest request) {
         StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader reader = requestBody.getReader()) {
+        try (BufferedReader reader = request.getReader()) {
             String line;
 
             while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
             }
-            return requestBody.toString();
+            return stringBuilder.toString();
 
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class DataQueryBuilder implements QueryBuilder {
     @Override
-    public String build(HttpServletRequest requestBody) {
+    public String build(HttpServletRequest request) {
         return null;
     }
 }
