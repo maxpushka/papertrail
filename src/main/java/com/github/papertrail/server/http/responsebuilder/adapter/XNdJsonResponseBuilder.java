@@ -1,13 +1,13 @@
 package com.github.papertrail.server.http.responsebuilder.adapter;
 
 import com.github.papertrail.server.http.responsebuilder.ResponseBuilder;
-import com.google.gson.JsonElement;
+import org.json.JSONObject;
 
 import java.util.List;
 
 public class XNdJsonResponseBuilder implements ResponseBuilder {
     @Override
-    public String build(List<JsonElement> input) {
+    public String build(List<JSONObject> input) {
         return null;
     }
 }

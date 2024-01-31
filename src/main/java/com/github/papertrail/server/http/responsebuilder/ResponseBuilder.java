@@ -1,9 +1,9 @@
 package com.github.papertrail.server.http.responsebuilder;
 
-import com.google.gson.JsonElement;
+import org.json.JSONObject;
 
 import java.util.List;
 
 public interface ResponseBuilder {
-    String build(List<JsonElement> input);
+    String build(List<JSONObject> input);
 }

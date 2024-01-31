@@ -16,8 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.google.code.gson:gson:2.10.1")
-    compileOnly("org.projectlombok:lombok:1.18.30")
+    implementation("org.json:json:20231013")
 
     implementation("org.springframework:spring-context:6.1.3")
     implementation("org.springframework:spring-web:6.1.3")
@@ -26,7 +25,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.2.2")
 
     implementation("org.springframework:spring-webmvc:6.1.3")
-    implementation("com.google.code.gson:gson:2.10.1")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0-M1")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
